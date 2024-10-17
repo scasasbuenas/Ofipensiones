@@ -4,6 +4,8 @@ import bcrypt
 import csv
 from faker import Faker
 
+# Este script genera un csv con usuarios y contraseñas aleatorias, y los almacena en una base de datos MongoDB.
+
 # Configuración de la conexión a MongoDB
 client = MongoClient('mongodb+srv://scasasbuenas:EaFOacx8sknELd1Y@cluster0.3wjlju4.mongodb.net/')
 db = client['ofipensiones']
