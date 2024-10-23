@@ -1,6 +1,12 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for, flash, session
 from pymongo import MongoClient
 import bcrypt
+import requests
+
+# Configuración inicial google RECAPTCHA
+SITE_KEY = '6Ld002cqAAAAAMTiK-Bt_DW8cXW5SP5pYbCyLmzS'
+SECRET_KEY = '6Ld002cqAAAAAKafoKBCiLmtSXfIqUxqllXeIgLD'
+VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify'
 
 # Configuración inicial de Flask y MongoDB
 app = Flask(__name__)
@@ -44,11 +50,15 @@ def login():
         
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             session['user_id'] = str(user['_id'])
+            secret_response = request.form['g-recaptcha-response']
+            
+            verify_respose = requests.post(url=f'{VERIFY_URL}?secret={SECRET_KEY}&response={secret_response}').json()
+            
             return redirect(url_for('dashboard'))
         else:
             flash('Credenciales inválidas. Intente nuevamente.', 'error')  # Etiqueta el mensaje como 'error'
             
-    return render_template('login.html')
+    return render_template('login.html', site_key = SITE_KEY)
 
 # Dashboard después del login
 @app.route('/dashboard')
