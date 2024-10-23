@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for, flash, session
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
+from flask_login import LoginManager, UserMixin, current_user, login_user, login_required, logout_user
 from pymongo import MongoClient
 import bcrypt
 import requests
@@ -26,6 +26,7 @@ class User(UserMixin):
         self.id = str(user_json['_id'])
         self.email = user_json['email']
 
+# Cargar usuario por ID
 @login_manager.user_loader
 def load_user(user_id):
     user = users.find_one({'_id': ObjectId(user_id)})
@@ -92,12 +93,17 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return 'Bienvenido al Dashboard'
+    user = load_user(current_user.get_id())  # Carga la información del usuario actual
+    return render_template('dashboard.html', email=user.email)
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
+# Cerrar sesión
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
