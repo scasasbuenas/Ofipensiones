@@ -4,9 +4,81 @@
     <meta charset="UTF-8">
     <title>Página de Inicio</title>
 </head>
+
 <body>
     <h1>Ofipensiones</h1>
-    <button onclick="window.location.href='/login'">Iniciar Sesión</button>
-    <button onclick="window.location.href='/register'">Registrar</button>
+    <div class="flex-container">
+        <div class="derecha">
+            <h2>¡Bienvenido!</h2>
+            <p>Haz tus pagos y transferencias de pensiones escolares de forma rápida y segura</p>
+            <div class="square">
+                <button class="button button1" onclick="window.location.href='/login'">Iniciar Sesión</button>
+                <button class="button button2" onclick="window.location.href='/register'">Registrar</button>
+            </div>
+        </div>
+
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='payments.png') }}" alt="Payments" width="700">
+        </div>
+    </div>
+    
+    <style>
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
+        body {
+            background-color: #00bf63;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .derecha{
+            color: white;
+        }
+
+        /* Flex container for alignment */
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 80%; /* Ajusta el ancho del contenedor según sea necesario */
+            max-width: 1000px; /* O cualquier otro valor según tu diseño */
+            margin-top: 20px;
+        }
+
+        .square {
+            background-color: white;
+            width: 320px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            margin-top:100px;
+        }
+
+        .button {
+            background-color:  #81c8a6;
+            padding: 10px 20px;
+            width: 250px;
+            height: 70px;
+            margin:10px;
+            color: white;
+            border:none;
+        }
+
+        /* Optional: adjust image to fit better */
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            margin-left:200px;
+        }
+
+    </style>
 </body>
 </html>
