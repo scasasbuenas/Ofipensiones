@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Código</title>
+    <style>
+    body {
+        background-color: #00bf63;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: white;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h2 {
+        color: white;
+        font-size: 40px;
+        margin-top: 50px;
+    }
+
+    form {
+        background-color: #181c29;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    label {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #fff;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        margin: 10px 0 20px 0;
+        width: 250px;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+    }
+
+    button {
+        background-color: #181c29;
+        color: white;
+        padding: 10px 20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    /* Hover effect */
+    button:hover {
+        background-color: #00bf63; /* Color de fondo verde */
+        color: #181c29; /* Color de texto oscuro */
+        transform: scale(1.05); /* Efecto de agrandar */
+    }
+    </style>
+</head>
+<body>
+    <h2>Confirmar Código</h2>
+    <form method="POST">
+        <label for="confirmation_code">Código de Confirmación:</label>
+        <input type="text" id="confirmation_code" name="confirmation_code" required><br><br>
+        <button type="submit">Confirmar</button>
+        
+    </form>
+    
+    <p style="padding: 10px";>ATENCIÓN! Si su correo no es gmail, es probable que encuentre el correo con el código en la sección de spam.</p>
+</body>
+</html>

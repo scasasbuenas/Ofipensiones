@@ -3,6 +3,11 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, login
 from pymongo import MongoClient
 import bcrypt
 import requests
+import smtplib
+import random
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import logging
 
 # Configuración inicial google RECAPTCHA
 SITE_KEY = '6Ld002cqAAAAAMTiK-Bt_DW8cXW5SP5pYbCyLmzS'
@@ -79,8 +84,9 @@ def login():
             secret_response = request.form['g-recaptcha-response']
             verify_response = requests.post(url=f'{VERIFY_URL}?secret={SECRET_KEY}&response={secret_response}').json()
             
-            if verify_response.get('success'):
-                return redirect(url_for('dashboard'))
+            if verify_response.get('success') == False:
+                send_confirmation_code(email)
+                return redirect(url_for('confirm_code'))
             else:
                 flash('Error de reCAPTCHA. Por favor, inténtelo de nuevo.')
         
@@ -88,11 +94,62 @@ def login():
     
     return render_template('login.html', site_key=SITE_KEY)
 
+@app.route('/confirm_code', methods=['GET', 'POST'])
+def confirm_code():
+    if request.method == 'POST':
+        code = request.form['confirmation_code']
+        if code == session.get('confirmation_code'):
+            session['confirmation_code_validated'] = True
+            return redirect(url_for('dashboard'))
+        else:
+            flash('No logramos autenticar tu identidad. Intenta nuevamente.', 'error')
+            return redirect(url_for('login'))
+    else:
+        if 'confirmation_code_validated' in session and session['confirmation_code_validated']:
+            return redirect(url_for('dashboard'))
+        flash('Debe confirmar su código antes de acceder al dashboard.', 'error')
+    return render_template('confirm_code.html')
+
+# Generar y enviar código de confirmación
+def send_confirmation_code(email):
+    code = str(random.randint(100000, 999999))
+    session['confirmation_code'] = code
+    logging.debug(f'Generated confirmation code: {code} for email: {email}')
+    try:
+        # Configurar el servidor SMTP y enviar el correo
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login('santiago.xasasbuenas@gmail.com', 'yvwe dtts anid cpml')  # Replace 'yvwe dtts anid cpml' with the generated App Password
+        
+        # Construir el mensaje de correo electrónico
+        msg = MIMEMultipart('alternative')
+        msg['From'] = 'santiago.xasasbuenas@gmail.com'
+        msg['To'] = email
+        msg['Subject'] = 'Código de Confirmación'
+        
+        text = f'Su código de confirmación es: {code}'
+        html = f'<p>Su código de confirmación es: <strong>{code}</strong></p>'
+        
+        part1 = MIMEText(text, 'plain')
+        part2 = MIMEText(html, 'html')
+        
+        msg.attach(part1)
+        msg.attach(part2)
+        
+        server.sendmail('santiago.xasasbuenas@gmail.com', email, msg.as_string())
+        server.quit()
+        logging.debug('Email sent successfully')
+    except Exception as e:
+        logging.error(f'Failed to send email: {e}')
 
 # Dashboard después del login
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    if 'confirmation_code_validated' not in session or not session['confirmation_code_validated']:
+        flash('Debe confirmar su código antes de acceder al dashboard.', 'error')
+        return redirect(url_for('confirm_code'))
+    
     user = load_user(current_user.get_id())  # Carga la información del usuario actual
     return render_template('dashboard.html', email=user.email)
 
