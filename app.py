@@ -14,12 +14,14 @@ SITE_KEY = '6Ld002cqAAAAAMTiK-Bt_DW8cXW5SP5pYbCyLmzS'
 SECRET_KEY = '6Ld002cqAAAAAKafoKBCiLmtSXfIqUxqllXeIgLD'
 VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify'
 
+
 # Configuración inicial de Flask y MongoDB
 app = Flask(__name__)
 app.secret_key = 'holabuenosdias'  # Necesaria para manejar sesiones en Flask
 client = MongoClient('mongodb+srv://scasasbuenas:EaFOacx8sknELd1Y@cluster0.3wjlju4.mongodb.net/')
 db = client['ofipensiones']
 users = db.users
+
 
 # Bloquea el acceso a las rutas que requieran login
 login_manager = LoginManager()
@@ -30,6 +32,7 @@ class User(UserMixin):
     def __init__(self, user_json):
         self.id = str(user_json['_id'])
         self.email = user_json['email']
+
 
 # Cargar usuario por ID
 @login_manager.user_loader
@@ -94,6 +97,7 @@ def login():
     
     return render_template('login.html', site_key=SITE_KEY)
 
+
 @app.route('/confirm_code', methods=['GET', 'POST'])
 def confirm_code():
     if request.method == 'POST':
@@ -109,6 +113,7 @@ def confirm_code():
             return redirect(url_for('dashboard'))
         flash('Debe confirmar su código antes de acceder al dashboard.', 'error')
     return render_template('confirm_code.html')
+
 
 # Generar y enviar código de confirmación
 def send_confirmation_code(email):
@@ -141,6 +146,7 @@ def send_confirmation_code(email):
         logging.debug('Email sent successfully')
     except Exception as e:
         logging.error(f'Failed to send email: {e}')
+
 
 # Dashboard después del login
 @app.route('/dashboard')
