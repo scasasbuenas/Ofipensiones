@@ -98,6 +98,7 @@ def login():
     return render_template('login.html', site_key=SITE_KEY)
 
 
+# Confirmación de código de autenticación
 @app.route('/confirm_code', methods=['GET', 'POST'])
 def confirm_code():
     if request.method == 'POST':
