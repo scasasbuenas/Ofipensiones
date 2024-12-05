@@ -165,6 +165,9 @@ def dashboard():
 @app.route('/logout')
 def logout():
     logout_user()
+    session.pop('confirmation_code', None)
+    session.pop('confirmation_code_validated', None)
+    flash('Has cerrado sesión exitosamente.', 'success')  # Add a success message for logout
     return redirect(url_for('home'))
 
 

@@ -9,7 +9,10 @@
 <body>
     <h1>Bienvenido al Dashboard, {{ email }}</h1>
     <p>Has ingresado con éxito al sistema. Aquí puedes gestionar tus actividades.</p>
+
     <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar Sesión</a>
+
+    <button onclick="window.open('http://127.0.0.1:8000/docs#/','_blank')" class="logout-btn">Info Pensiones Colegios</button>
 
     <style>
         body {

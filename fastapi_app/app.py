@@ -186,8 +186,8 @@ from reportlab.pdfgen import canvas
 # Configuración de SMTP para enviar correos
 SMTP_SERVER = "smtp.gmail.com"  # Servidor SMTP de Gmail
 SMTP_PORT = 587
-SMTP_EMAIL = "a@gmail.com"  # Reemplaza con tu correo
-SMTP_PASSWORD = "a"  # Reemplaza con la contraseña de tu correo
+SMTP_EMAIL = "santiago.xasasbuenas@gmail.com"  # Reemplaza con tu correo
+SMTP_PASSWORD = "yvwe dtts anid cpml"  # Reemplaza con la contraseña de tu correo
 
 def generar_pdf(reporte, nombre_archivo):
     """
@@ -307,8 +307,8 @@ import asyncio
 
 @app.post("/send-email")
 async def send_email():
-    sender_email = "a@gmail.com"
-    sender_password = "a"
+    sender_email = "santiago.xasasbuenas@gmail.com"
+    sender_password = "yvwe dtts anid cpml"
     receiver_email = "juanlozanog9@gmail.com"
     message = MIMEMultipart()
     message["From"] = sender_email
